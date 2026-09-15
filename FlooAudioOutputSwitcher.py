@@ -75,11 +75,6 @@ class FlooAudioOutputSwitcher:
 			self._headset_connected = False
 			self._restore_previous_output()
 
-	def shutdown(self):
-		if self.enabled:
-			self._restore_previous_output()
-		self._headset_connected = False
-
 	def _get_backend(self):
 		if self._backend is None:
 			try:
