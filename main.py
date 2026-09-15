@@ -20,6 +20,9 @@ import urllib.request
 import certifi
 import ssl
 
+if os.getenv("FLOOCAST_IMPORT_SMOKE_TEST") == "1":
+    sys.exit(0)
+
 appIcon = "FlooCastApp.ico"
 appGif = "FlooCastApp.gif"
 appTitle = "FlooCast"
@@ -51,8 +54,11 @@ else:
     userLocale = wx.Locale.GetSystemLanguage()
     lan = wx.Locale.GetLanguageInfo(userLocale).CanonicalName
 
-# Set the local directory
-app_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+# Set the local directory. PyInstaller extracts one-file builds under _MEIPASS.
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    app_path = sys._MEIPASS
+else:
+    app_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 localedir = app_path + os.sep + 'locales'
 # Set up your magic function
 translate = gettext.translation("messages", localedir, languages=[lan], fallback=True)
