@@ -888,7 +888,7 @@ def auto_switch_audio_enable_set(enable):
     audioOutputSwitcher.set_enabled(enable)
     autoSwitchAudioButton.SetBitmap(on if autoSwitchAudio else off)
     autoSwitchAudioButton.SetToolTip(
-        _('Toggle switch for') + ' ' + _('Automatically switch Windows audio output') + ' ' +
+        _('Toggle switch for') + ' ' + _('Auto-switch audio output') + ' ' +
         (_('On') if autoSwitchAudio else _('Off'))
     )
     if enable and 'flooSm' in globals():
@@ -907,13 +907,13 @@ def auto_switch_audio_enable_switch(event):
 autoSwitchAudioCheckBox = wx.CheckBox(
     settingsPanel,
     wx.ID_ANY,
-    label=_('Automatically switch Windows audio output'),
+    label=_('Auto-switch audio output'),
 )
 autoSwitchAudioCheckBox.SetValue(autoSwitchAudio)
 autoSwitchAudioButton = wx.Button(settingsPanel, wx.ID_ANY, style=wx.NO_BORDER | wx.MINIMIZE)
 autoSwitchAudioButton.SetBitmap(on if autoSwitchAudio else off)
 autoSwitchAudioButton.SetToolTip(
-    _('Toggle switch for') + ' ' + _('Automatically switch Windows audio output') + ' ' +
+    _('Toggle switch for') + ' ' + _('Auto-switch audio output') + ' ' +
     (_('On') if autoSwitchAudio else _('Off'))
 )
 settingsPanel.Bind(wx.EVT_CHECKBOX, auto_switch_audio_enable_switch, autoSwitchAudioCheckBox)
