@@ -34,8 +34,8 @@ jobs:
         shell: pwsh
         run: |
           $env:FLOOCAST_IMPORT_SMOKE_TEST = '1'
-          & dist/FlooCast-Audio-Switch-Test.exe
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $process = Start-Process -FilePath dist/FlooCast-Audio-Switch-Test.exe -Wait -PassThru
+          if ($process.ExitCode -ne 0) { exit $process.ExitCode }
 
       - name: Show checksum
         shell: pwsh
