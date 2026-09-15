@@ -34,6 +34,7 @@ class PycawAudioBackend:
 
 class FlooAudioOutputSwitcher:
 	IDLE_STATE = 1
+	DISCONNECTING_STATE = 8
 	CONNECTED_STATES = frozenset((4, 5, 6, 7, 9, 10, 11))
 	TARGET_NAME_PARTS = ("fma120", "floogoo")
 
@@ -66,10 +67,11 @@ class FlooAudioOutputSwitcher:
 		if not self.enabled or not self.supported or state is None:
 			return
 
+		print("[AudioOutputSwitcher] FlooGoo source state: " + str(state))
 		if state in self.CONNECTED_STATES and not self._headset_connected:
 			self._headset_connected = True
 			self._switch_to_floogoo()
-		elif state == self.IDLE_STATE and self._headset_connected:
+		elif state in (self.DISCONNECTING_STATE, self.IDLE_STATE) and self._headset_connected:
 			self._headset_connected = False
 			self._restore_previous_output()
 
@@ -106,9 +108,18 @@ class FlooAudioOutputSwitcher:
 			self._target_device_id = target.id
 			if current is not None and current.id == target.id:
 				self._previous_device_id = None
+				print(
+					"[AudioOutputSwitcher] FMA120 is already the default output; "
+					"there is no previous output to restore"
+				)
 				return
 
 			self._previous_device_id = current.id if current is not None else None
+			print(
+				"[AudioOutputSwitcher] Switching from " +
+				((current.FriendlyName or "<unnamed>") if current is not None else "<none>") +
+				" to " + (target.FriendlyName or "<unnamed>")
+			)
 			backend.set_default_output(target.id)
 		except Exception as exc:
 			self._previous_device_id = None
@@ -122,7 +133,13 @@ class FlooAudioOutputSwitcher:
 			backend = self._get_backend()
 			current = backend.get_default_output()
 			if current is not None and current.id == self._target_device_id:
+				print("[AudioOutputSwitcher] Restoring the previous Windows output")
 				backend.set_default_output(self._previous_device_id)
+			else:
+				print(
+					"[AudioOutputSwitcher] Default output changed manually; "
+					"leaving it unchanged"
+				)
 		except Exception as exc:
 			self._report_error(str(exc))
 		finally:
