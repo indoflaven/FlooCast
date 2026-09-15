@@ -22,13 +22,20 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt pyinstaller==6.16.0
+          python -m pip install -r requirements.txt pyinstaller==6.22.3
 
       - name: Run tests
         run: python -m unittest -v test_audio_output_switcher.py
 
       - name: Build executable
         run: pyinstaller --noconfirm --clean FlooCast.spec
+
+      - name: Smoke-test packaged imports
+        shell: pwsh
+        run: |
+          $env:FLOOCAST_IMPORT_SMOKE_TEST = '1'
+          & dist/FlooCast-Audio-Switch-Test.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Show checksum
         shell: pwsh
