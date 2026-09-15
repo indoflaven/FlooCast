@@ -1,0 +1,49 @@
+name: Build Windows test executable
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyinstaller==6.22.3
+
+      - name: Run tests
+        run: python -m unittest -v test_audio_output_switcher.py
+
+      - name: Build executable
+        run: pyinstaller --noconfirm --clean FlooCast.spec
+
+      - name: Smoke-test packaged imports
+        shell: pwsh
+        run: |
+          $env:FLOOCAST_IMPORT_SMOKE_TEST = '1'
+          $process = Start-Process -FilePath dist/FlooCast-Audio-Switch-Test.exe -Wait -PassThru
+          if ($process.ExitCode -ne 0) { exit $process.ExitCode }
+
+      - name: Show checksum
+        shell: pwsh
+        run: Get-FileHash dist/FlooCast-Audio-Switch-Test.exe -Algorithm SHA256
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlooCast-Audio-Switch-Test
+          path: dist/FlooCast-Audio-Switch-Test.exe
+          if-no-files-found: error
