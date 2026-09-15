@@ -1,13 +1,14 @@
-from PyInstaller.utils.hooks import collect_submodules
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 
 hidden_imports = collect_submodules('pycaw')
+sounddevice_data = collect_data_files('_sounddevice_data')
 
 a = Analysis(
 	['main.py'],
 	pathex=[],
 	binaries=[],
-	datas=[
+	datas=sounddevice_data + [
 		('FlooCastApp.gif', '.'),
 		('FlooCastApp.ico', '.'),
 		('FlooCastHeader.png', '.'),
