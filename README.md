@@ -13,7 +13,7 @@ On Windows, the compiled App can be downloaded directly from Microsoft Store.
 
 FlooCast can optionally make the FMA120 the default Windows audio output when a
 paired headset connects, then restore the previous output when it disconnects.
-Enable **Automatically switch Windows audio output** in Settings. This option is
+Enable **Auto-switch audio output** in Settings. This option is
 off by default and does not change the communications audio device.
 
 To run FlooCast from source on Windows, double-click
