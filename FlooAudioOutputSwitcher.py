@@ -58,9 +58,10 @@ class FlooAudioOutputSwitcher:
 		return self._is_windows
 
 	def set_enabled(self, enabled: bool):
-		if self.enabled and not enabled:
-			self._restore_previous_output()
+		if not enabled:
 			self._headset_connected = False
+			self._previous_device_id = None
+			self._target_device_id = None
 		self.enabled = enabled
 
 	def handle_source_state(self, state: Optional[int]):
