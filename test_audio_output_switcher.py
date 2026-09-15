@@ -43,6 +43,7 @@ class FlooAudioOutputSwitcherTests(unittest.TestCase):
 		self.switcher.handle_source_state(4)
 		self.switcher.handle_source_state(6)
 		self.switcher.handle_source_state(8)
+		self.assertEqual(["floogoo", "speakers"], self.backend.switches)
 		self.switcher.handle_source_state(1)
 
 		self.assertEqual(["floogoo", "speakers"], self.backend.switches)
