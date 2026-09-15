@@ -354,7 +354,6 @@ def quit_all():
 
 # Define a function for quit the window
 def quit_window(event):
-    audioOutputSwitcher.shutdown()
     windowIcon.Destroy()
     appFrame.Destroy()
 
