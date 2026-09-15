@@ -64,6 +64,13 @@ class FlooAudioOutputSwitcherTests(unittest.TestCase):
 
 		self.assertEqual([], self.backend.switches)
 
+	def test_disabling_after_switch_does_not_change_output(self):
+		self.switcher.handle_source_state(4)
+		self.switcher.set_enabled(False)
+		self.switcher.handle_source_state(1)
+
+		self.assertEqual(["floogoo"], self.backend.switches)
+
 	def test_non_windows_switcher_does_nothing(self):
 		switcher = FlooAudioOutputSwitcher(
 			enabled=True,
