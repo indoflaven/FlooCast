@@ -20,6 +20,9 @@ import urllib.request
 import certifi
 import ssl
 
+if os.getenv("FLOOCAST_IMPORT_SMOKE_TEST") == "1":
+    sys.exit(0)
+
 appIcon = "FlooCastApp.ico"
 appGif = "FlooCastApp.gif"
 appTitle = "FlooCast"
