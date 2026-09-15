@@ -1335,6 +1335,7 @@ class FlooSmDelegate(FlooStateMachineDelegate):
             audio_mode_sel_set(mode)
 
     def sourceStateInd(self, state: int):
+        print("FlooGoo source state: " + str(state) + " (" + sourceStateStr[state] + ")")
         dongleStateText.SetLabelText(sourceStateStr[state])
         dongleStateSbSizer.Layout()
         audioOutputSwitcher.handle_source_state(state)
